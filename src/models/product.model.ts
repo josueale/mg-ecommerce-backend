@@ -26,6 +26,11 @@ const ProductSchema = new Schema<Product>({
     default: false
   },
 
+  on_sale_price: {
+    type: Number,
+    default: 0
+  },
+
   category: String,
 
   tags: {

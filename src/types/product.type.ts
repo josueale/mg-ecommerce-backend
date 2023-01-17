@@ -11,6 +11,7 @@ export interface Product {
   in_stock: boolean
 
   is_on_sale: boolean
+  on_sale_price: number
 
   tags: string[]
   category: string
