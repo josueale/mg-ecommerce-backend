@@ -1,16 +1,15 @@
 import { Request, Response } from 'express';
+import { ObjectId } from 'mongodb';
 
 import { decode, generate } from '@Helpers/jwt';
 import Users from '@Models/user.model';
-import { ObjectId } from 'mongodb';
 
 export async function loginByTokenController(req: Request, res: Response) {
   try {
     const { token } = req.body;
 
     const errorAuth = {
-      status: 'error',
-      type: 'user-credentials',
+      isSuccess: false,
       message: 'Incorrect credentials, please verify your credentials.',
       value: null,
     };
@@ -32,6 +31,7 @@ export async function loginByTokenController(req: Request, res: Response) {
     );
 
     if (!match) {
+      // return 400 because we won't let the attacker know what part of the request it's bad
       res.status(400).json(errorAuth);
 
       return;
@@ -49,8 +49,7 @@ export async function loginByTokenController(req: Request, res: Response) {
     };
 
     res.json({
-      status: 'success',
-      type: 'user-login',
+      isSuccess: true,
       message: 'Logged successfully',
       value: defaultResponse,
     });

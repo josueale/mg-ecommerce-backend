@@ -1,24 +1,19 @@
 import { Router } from 'express';
 
+import AuthMiddleware from '@Middlewares/Auth.middleware';
+
+import { createUserController, deleteUserController, loginByTokenController, loginUserController, updateUserProfileController } from '@Controllers/users/v1';
+
+
 
 const router = Router();
 
-router.post('/admin/register',)
-router.post('/admin/login',)
-router.get('/admin/token',)
-router.get('/admin',)
+router.post('/register', createUserController)
+router.post('/login', loginUserController)
+router.get('/token', loginByTokenController)
 
-router.get('/admin/user',)
-router.post('/admin/user',)
-router.put('/admin/user',)
-router.delete('/admin/user',)
+router.delete('/user/:id', deleteUserController)
 
-
-router.post('/ecommerce/register',)
-router.post('/ecommerce/login',)
-router.get('/ecommerce/token',)
-router.get('/ecommerce',)
-
-router.put('/ecommerce/profile',)
+router.put('/profile', AuthMiddleware, updateUserProfileController)
 
 export default router;

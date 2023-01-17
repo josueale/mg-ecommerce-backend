@@ -9,8 +9,7 @@ export async function loginUserController(req: Request, res: Response) {
     const { email, password } = req.body;
 
     const errorAuth = {
-      status: 'error',
-      type: 'user-credentials',
+      isSuccess: false,
       message: 'Incorrect credentials, please verify your credentials.',
       value: null,
     };

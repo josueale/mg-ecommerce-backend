@@ -9,29 +9,30 @@ export async function deleteUserController(req: Request, res: Response) {
 
     if (!isValidObjectId(id)) {
       res.status(400).json({
-        status: 'error',
-        type: 'bad-request',
+        isSuccess: false,
         message: 'Must provide a valid id',
         value: null,
       });
       return;
     }
 
-    const userD = await Users.deleteOne({ _id: new ObjectId(id) });
+    const userMatch = await Users.findOne({ _id: new ObjectId(id) });
 
-    if (!userD.deletedCount) {
-      res.status(400).json({
-        status: 'error',
-        type: 'deleting-user',
-        message: 'Error while deleting User',
+    if (!userMatch) {
+      res.status(404).json({
+        isSuccess: false,
+        message: 'User not found',
         value: null,
       });
       return;
     }
 
+    userMatch.is_active = false
+
+    await userMatch.save()
+
     res.json({
-      status: 'success',
-      type: 'user-deleted',
+      isSuccess: true,
       message: 'User deleted successfully',
       value: id,
     });
