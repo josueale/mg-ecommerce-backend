@@ -1,8 +1,12 @@
 import { Types } from 'mongoose';
 
+export interface CartItem {
+  product_id: Types.ObjectId
+  quantity: number
+}
+
 export interface Cart {
   is_active: boolean
-
-  user_id: Types.ObjectId
-  products_id: Types.ObjectId[]
+  items: CartItem[]
+  // user_id: Types.ObjectId
 }

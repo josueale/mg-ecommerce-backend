@@ -1,17 +1,14 @@
 import { Router } from 'express';
 
+import {
+  getCartController,
+  updateCartController,
+} from '@Controllers/cart/v1';
 
 const router = Router();
 
-/*
 
-GET  carts/products (gets carts or creates it if needed)
-PUT  carts/products (updates cart)
-
-*/
-
-router.get('/', );
-router.put('/', );
-
+router.get('/', getCartController);
+router.put('/', updateCartController);
 
 export default router;

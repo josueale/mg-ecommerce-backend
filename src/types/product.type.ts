@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 
 export interface Product {
+  _id: Types.ObjectId
   is_active: boolean
 
   title: string
