@@ -5,7 +5,6 @@ import AuthMiddleware from '@Middlewares/Auth.middleware';
 import { createUserController, deleteUserController, loginByTokenController, loginUserController, updateUserProfileController } from '@Controllers/users/v1';
 
 
-
 const router = Router();
 
 router.post('/register', createUserController)

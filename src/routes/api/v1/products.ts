@@ -7,6 +7,7 @@ import {
   updateProductController,
 } from '@Controllers/products/v1';
 
+// TODO add auth middleware to create update and delete product
 
 const router = Router();
 
