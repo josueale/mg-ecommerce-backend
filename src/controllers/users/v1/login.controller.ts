@@ -10,6 +10,7 @@ export async function loginUserController(req: Request, res: Response) {
 
     const errorAuth = {
       isSuccess: false,
+      code: 400,
       message: 'Incorrect credentials, please verify your credentials.',
       value: null,
     };
@@ -40,8 +41,8 @@ export async function loginUserController(req: Request, res: Response) {
     };
 
     res.json({
-      status: 'success',
-      type: 'user-login',
+      isSuccess: true,
+      code: 200,
       message: 'Logged successfully',
       value: defaultResponse,
     });

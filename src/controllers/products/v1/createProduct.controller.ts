@@ -16,6 +16,7 @@ export async function createProductController(req: Request, res: Response) {
     if (productMatch) {
       res.status(400).json({
         isSuccess: false,
+        status: 400,
         message: 'Product already exists',
         value: productMatch,
       })
@@ -38,8 +39,9 @@ export async function createProductController(req: Request, res: Response) {
 
     const productSaved = await product.save()
 
-    res.json({
+    res.status(201).json({
       isSuccess: true,
+      status: 201,
       message: 'Product created',
       value: productSaved,
     })

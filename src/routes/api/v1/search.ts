@@ -1,3 +1,4 @@
+import { searchProductController } from '@Controllers/search/v1';
 import { Router } from 'express';
 
 const router = Router();
@@ -14,7 +15,7 @@ GET  search/products
 
 */
 
-router.get('/products',);
+router.get('/products', searchProductController );
 
 
 export default router;

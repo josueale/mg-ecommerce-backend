@@ -54,14 +54,6 @@ app.use(express.static(uploadsDir));
 app.disable('x-powered-by');
 
 // Routes
-app.get('/', (_req, res) => {
-
-  res.status(200).json({
-    hola: 'mundo'
-  })
-
-});
-
 app.use('/api/v1/users', api_v1.userRoutes);
 app.use('/api/v1/products', api_v1.productRoutes);
 app.use('/api/v1/cart', api_v1.cartRoutes);
