@@ -11,6 +11,7 @@ export async function deleteProductController(req: Request, res: Response) {
 
     if (!productMatch) {
       res.status(404).json({
+        code: 404,
         isSuccess: false,
         message: 'Product not found',
         value: null,
@@ -23,6 +24,7 @@ export async function deleteProductController(req: Request, res: Response) {
     const productUpdated = await productMatch.save()
 
     res.json({
+      code: 200,
       isSuccess: true,
       message: 'Product updated',
       value: productUpdated,

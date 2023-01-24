@@ -24,6 +24,7 @@ export async function createProductController(req: Request, res: Response) {
     }
 
     const product = new Products({
+      title: title?.trim() ?? '',
       description: description?.trim() ?? '',
       price: price ?? 0,
 

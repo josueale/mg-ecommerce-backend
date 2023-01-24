@@ -4,6 +4,8 @@ import User from '@Types/user.type';
 
 const UserSchema = new Schema<User>(
   {
+    is_active: { type: Boolean, default: true },
+
     name: String,
     lastname: String,
 

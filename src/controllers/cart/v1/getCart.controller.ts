@@ -10,13 +10,41 @@ interface Cart {
   products: Product[]
 }
 
+const createCart = async (items: any[] = []) => {
+
+  const DSS = new Carts({
+    is_active: true,
+    items: items
+  })
+
+  const res = await DSS.save()
+
+  return res
+
+}
+
+
 export async function getCartController(req: Request, res: Response) {
   try {
+    const create = async () => {
+      const cartCreated = await createCart([])
 
-    const { cart_id } = req.body
+      res.status(201).json({
+        isSuccess: true,
+        code: 201,
+        message: 'Cart created',
+        value: cartCreated,
+      })
+    }
 
+    const cart_id = req.get('cart_id')
 
-    if (!isValidObjectId(cart_id)) {
+    if (!cart_id) {
+      create()
+      return
+    }
+
+    if (cart_id && !isValidObjectId(cart_id)) {
       res
         .status(400)
         .json({
@@ -55,8 +83,7 @@ export async function getCartController(req: Request, res: Response) {
     ])
 
     if (!cartMatch) {
-      // TODO create cart
-
+      create()
       return
     }
 
