@@ -33,12 +33,12 @@ export async function getCartController(req: Request, res: Response) {
         isSuccess: true,
         code: 201,
         message: 'Cart created',
-        value: cartCreated,
+        // @ts-ignore
+        value: { ...cartCreated._doc, products: [] },
       })
     }
 
     const cart_id = req.get('cart_id')
-    console.log(cart_id);
 
     if (!cart_id) {
       create()
@@ -56,6 +56,13 @@ export async function getCartController(req: Request, res: Response) {
       return
     }
 
+    const cartExist = await Carts.findOne({ is_active: true, _id: new ObjectId(cart_id) })
+
+    if (!cartExist) {
+      create()
+      return
+    }
+
     const [cartMatch] = await Carts.aggregate<Cart>([
       {
         $match: {
@@ -64,7 +71,7 @@ export async function getCartController(req: Request, res: Response) {
         }
       },
 
-      { $unwind: { path: '$items', preserveNullAndEmptyArrays: true } },
+      { $unwind: { path: '$items' } },
 
       {
         $lookup: {
@@ -91,34 +98,35 @@ export async function getCartController(req: Request, res: Response) {
           _id: '$_id',
           products: { $push: '$product' },
           subtotal: { "$sum": { "$multiply": ["$product.price", "$product.quantity"] } },
-          shipping: { "$sum": 5 },
+          shipping: { "$sum": { "$multiply": ["$product.quantity", 5] } },
         },
       },
 
       {
         $addFields: {
-          total: {$sum: ['$subtotal', '$shipping']}
+          total: { $sum: ['$subtotal', '$shipping'] }
         }
-      }
+      },
 
-      // {
-      //   $project: {
-      //     items: 0,
-      //   }
-      // },
+      {
+        $project: {
+          items: 0,
+        }
+      },
 
     ])
-
-    if (!cartMatch) {
-      create()
-      return
-    }
 
     res.json({
       isSuccess: true,
       code: 200,
       message: 'Cart found',
-      value: cartMatch
+      value: cartMatch ?? {
+        _id: cart_id,
+        products: [],
+        total: 0,
+        shipping: 0,
+        subtotal: 0,
+      }
     })
 
   } catch (error) {
