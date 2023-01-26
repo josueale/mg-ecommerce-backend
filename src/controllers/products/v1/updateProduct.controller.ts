@@ -1,22 +1,24 @@
 import Products from '@Models/product.model';
 import { Request, Response } from 'express';
+import { ObjectId } from 'mongodb';
 
 export async function updateProductController(req: Request, res: Response) {
   try {
 
     const {
+      product_id,
       title, description, price,
       stock, in_stock,
       is_on_sale, on_sale_price,
       tags, category,
     } = req.body
 
-    const productMatch = await Products.findOne({ title: title?.trim() ?? '' })
+    const productMatch = await Products.findOne({ _id: new ObjectId(product_id) })
 
     if (!productMatch) {
       res.status(404).json({
         isSuccess: false,
-        message: 'Product does not found',
+        message: 'Product does not exists',
         value: null,
       })
       return
@@ -24,6 +26,7 @@ export async function updateProductController(req: Request, res: Response) {
 
 
     productMatch.description = description?.trim() ?? ''
+    productMatch.title = title?.trim() ?? ''
     productMatch.price = price ?? 0
 
     productMatch.stock = stock ?? 0

@@ -5,6 +5,7 @@ import AuthMiddleware from '@Middlewares/Auth.middleware';
 import {
   createUserController,
   deleteUserController,
+  getUserByIdForAdminController,
   getUsersForAdminController,
   loginByTokenController,
   loginUserController,
@@ -15,6 +16,7 @@ import {
 const router = Router();
 
 router.get('/admin', getUsersForAdminController )
+router.get('/admin/:id', getUserByIdForAdminController )
 
 
 router.post('/register', createUserController)

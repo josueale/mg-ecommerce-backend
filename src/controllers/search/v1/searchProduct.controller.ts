@@ -2,11 +2,13 @@ import { Request, Response } from 'express';
 import { PipelineStage } from 'mongoose';
 
 
+import { slugify } from '@Helpers/search';
 import Products from '@Models/product.model';
 
 interface Query {
   is_active: true
   name?: string | RegExp
+  title?: any | string | RegExp
   min?: number
   max?: number
   category?: string
@@ -22,7 +24,11 @@ export async function searchProductController(req: Request, res: Response) {
     // category: '',
     // order: ['price+-', 'dateCreated', 'comments/popularity' ]
 
-    const { name, min, max, category, order } = req.query
+    const {
+      title,
+      // name,
+      //  min, max, category, order
+    } = req.query
 
     const query: Query = {
       is_active: true
@@ -34,33 +40,36 @@ export async function searchProductController(req: Request, res: Response) {
       }
     }
 
-    if (name) {
-      query.name = new RegExp(name as string)
+    if (title) {
+      // query.title = new RegExp(name as string)
+      query.title = { $regex: slugify(title as string) ?? '', $options: 'i' }
+
     }
 
-    if (min) {
-      query.min = Number(min)
-    }
+    // if (min) {
+    //   query.min = Number(min)
+    // }
 
-    if (max) {
-      query.max = Number(max)
-    }
+    // if (max) {
+    //   query.max = Number(max)
+    // }
 
-    if (category) {
-      query.category = category as string
-    }
+    // if (category) {
+    //   query.category = category as string
+    // }
 
-    if (order) {
-      queryOrder.$sort = {
-        createdAt: -1
-      }
-    }
+    // if (order) {
+    //   queryOrder.$sort = {
+    //     createdAt: -1
+    //   }
+    // }
 
     const productsMatch = await Products.aggregate([
       { $match: query },
       queryOrder
     ])
 
+    console.log({ $match: query });
     res.json({
       isSuccess: true,
       code: 200,

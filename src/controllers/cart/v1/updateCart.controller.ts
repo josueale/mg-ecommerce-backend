@@ -39,6 +39,26 @@ export async function updateCartController(req: Request, res: Response) {
       return
     }
 
+    if (cartMatch.items[productIndex].quantity === 1 && quantity === -1) {
+
+      const updated = await Carts.findOneAndUpdate(
+        { _id: new ObjectId(cart_id) },
+        { $pull: { items: { product_id: new ObjectId(product_id) } } },
+        { returnOriginal: false }
+      )
+
+      console.log({ product_id, updated });
+
+      res.json({
+        isSuccess: true,
+        code: 200,
+        message: 'Cart updated',
+        value: updated,
+      })
+
+      return
+    }
+
     const updated = await Carts.findOneAndUpdate(
       {
         _id: new ObjectId(cart_id),
