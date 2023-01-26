@@ -58,6 +58,10 @@ app.use('/api/v1/users', api_v1.userRoutes);
 app.use('/api/v1/products', api_v1.productRoutes);
 app.use('/api/v1/cart', api_v1.cartRoutes);
 
+app.use('/api/v1/home', api_v1.homeRoutes);
+
+// app.use('/api/v1/orders', api_v1.cartRoutes);
+
 //
 app.use('/api/v1/analytics', api_v1.userRoutes);
 app.use('/api/v1/search', api_v1.searchRoutes);

@@ -38,6 +38,7 @@ export async function getCartController(req: Request, res: Response) {
     }
 
     const cart_id = req.get('cart_id')
+    console.log(cart_id);
 
     if (!cart_id) {
       create()
@@ -63,22 +64,48 @@ export async function getCartController(req: Request, res: Response) {
         }
       },
 
+      { $unwind: { path: '$items', preserveNullAndEmptyArrays: true } },
+
       {
         $lookup: {
           from: 'products',
-          let: { match: '$products_id' },
+          let: { match: '$items', quantityMatch: '$items.quantity' },
           pipeline: [
-            { $match: { $in: ['$_id', '$$match'] } }
+            { $match: { $expr: { $eq: ['$_id', '$$match.product_id'] } } },
+
+            {
+              $addFields: {
+                quantity: '$$quantityMatch'
+              }
+            }
           ],
-          as: 'products'
+          as: 'product'
         }
       },
 
+      { $unwind: { path: '$product', preserveNullAndEmptyArrays: true } },
+
+
       {
-        $project: {
-          products_id: 0,
-        }
+        $group: {
+          _id: '$_id',
+          products: { $push: '$product' },
+          subtotal: { "$sum": { "$multiply": ["$product.price", "$product.quantity"] } },
+          shipping: { "$sum": 5 },
+        },
       },
+
+      {
+        $addFields: {
+          total: {$sum: ['$subtotal', '$shipping']}
+        }
+      }
+
+      // {
+      //   $project: {
+      //     items: 0,
+      //   }
+      // },
 
     ])
 

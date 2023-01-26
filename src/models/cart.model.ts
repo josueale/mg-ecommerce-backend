@@ -15,6 +15,8 @@ const CartSchema = new Schema<Cart>(
   { versionKey: false, timestamps: true }
 );
 
+CartSchema.index({ is_active: 1 })
+
 const Carts = model('cart', CartSchema);
 
 export default Carts;
