@@ -7,6 +7,7 @@ import Carts from '@Models/cart.model';
 export async function updateCartController(req: Request, res: Response) {
   try {
     const { product_id, quantity, cart_id } = req.body
+    console.log({ product_id, quantity, cart_id });
 
     const cartMatch = await Carts.findOne({ _id: new ObjectId(cart_id), is_active: true })
 
@@ -39,7 +40,11 @@ export async function updateCartController(req: Request, res: Response) {
     }
 
     const updated = await Carts.findOneAndUpdate(
-      { _id: new ObjectId(product_id), is_active: true },
+      {
+        _id: new ObjectId(cart_id),
+        'items.product_id': new ObjectId(product_id),
+        is_active: true
+      },
       {
         $inc: {
           'items.$.quantity': quantity
