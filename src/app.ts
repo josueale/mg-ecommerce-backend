@@ -60,7 +60,7 @@ app.use('/api/v1/cart', api_v1.cartRoutes);
 
 app.use('/api/v1/home', api_v1.homeRoutes);
 
-// app.use('/api/v1/orders', api_v1.cartRoutes);
+app.use('/api/v1/orders', api_v1.orderRoutes);
 
 //
 app.use('/api/v1/analytics', api_v1.userRoutes);
